@@ -49,9 +49,12 @@ def write_subreddits(csv_file, subreddits):
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         for row in subreddits:
+            print("====================")
+            print(row)
             row["last_selected"] = row["last_selected"].strftime("%Y-%m-%d %H:%M:%S")
             row["members"] = int(row["members"])
-            writer.writerow(row)
+            print(row)
+            # writer.writerow(row)
 
 def create_post(selected_subreddit):
     reddit = praw.Reddit(client_id=client_id, client_secret=client_secret, user_agent=user_agent, username=username, password=password)
@@ -65,19 +68,16 @@ def main():
     print("Calculating weights...")
     weights = calculate_weights(subreddits)
 
-    print(subreddits)
-    print(weights)
-
     selected_subreddit = select_subreddit(subreddits, weights)
     print(f"Selected subreddit: {selected_subreddit['subreddit']}")
 
     print("Creating post...")
     # members = create_post(selected_subreddit)
-    members = 10
+    members = 42
 
     print("Updating CSV file...")
     update_subreddit(selected_subreddit, members)
-    write_subreddits(csv_file_path, subreddits)
+    # write_subreddits(csv_file_path, subreddits)
 
     print("All done :D")
 
