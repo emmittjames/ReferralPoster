@@ -1,4 +1,5 @@
 import random
+import sys
 import praw
 import configparser
 import csv
@@ -30,13 +31,20 @@ def calculate_weights(subreddits):
     weights = []
     for subreddit in subreddits:
         days_since_last_selected = (now - subreddit["last_selected"]).days
-        member_factor = subreddit['members'] / 100
-        weight = (1 * days_since_last_selected) * (1 + 0.3 * (member_factor / 1000))
+        if days_since_last_selected < 3:
+            weight = 0
+        else:
+            member_factor = subreddit['members'] / 100
+            weight = (1 * days_since_last_selected) * (1 + 0.3 * (member_factor / 1000))
         weights.append(weight)
     return weights
 
 def select_subreddit(subreddits, weights):
-    selected_subreddit = random.choices(population=subreddits, weights=weights, k=1)[0]
+    try:
+        selected_subreddit = random.choices(population=subreddits, weights=weights, k=1)[0]
+    except ValueError:
+        print("All subreddits have been posted to recently. Exiting now.")
+        sys.exit(1)
     return selected_subreddit
 
 def update_subreddit(subreddit, members):
@@ -70,7 +78,6 @@ def main():
 
     print("Creating post...")
     members = create_post(selected_subreddit)
-    members = 42
 
     print("Updating CSV file...")
     update_subreddit(selected_subreddit, members)
@@ -79,5 +86,5 @@ def main():
     print("All done :D")
 
 if __name__ == "__main__":
-    if random.random() < 1:
+    if random.random() < 0.1:
         main()
