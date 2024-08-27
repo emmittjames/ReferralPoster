@@ -21,7 +21,7 @@ def read_subreddits(csv_file):
         reader = csv.DictReader(file)
         for row in reader:
             row["last_selected"] = datetime.strptime(row["last_selected"], "%Y-%m-%d %H:%M:%S")
-            row['members'] = int(row['members'])
+            row["members"] = int(row["members"])
             subreddits.append(row)
     return subreddits
 
@@ -45,16 +45,13 @@ def update_subreddit(subreddit, members):
 
 def write_subreddits(csv_file, subreddits):
     with open(csv_file, mode="w", newline="") as file:
-        fieldnames = ["subreddit", "last_selected"]
+        fieldnames = ["subreddit", "last_selected", "members"]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         for row in subreddits:
-            print("====================")
-            print(row)
             row["last_selected"] = row["last_selected"].strftime("%Y-%m-%d %H:%M:%S")
             row["members"] = int(row["members"])
-            print(row)
-            # writer.writerow(row)
+            writer.writerow(row)
 
 def create_post(selected_subreddit):
     reddit = praw.Reddit(client_id=client_id, client_secret=client_secret, user_agent=user_agent, username=username, password=password)
@@ -72,12 +69,12 @@ def main():
     print(f"Selected subreddit: {selected_subreddit['subreddit']}")
 
     print("Creating post...")
-    # members = create_post(selected_subreddit)
+    members = create_post(selected_subreddit)
     members = 42
 
     print("Updating CSV file...")
     update_subreddit(selected_subreddit, members)
-    # write_subreddits(csv_file_path, subreddits)
+    write_subreddits(csv_file_path, subreddits)
 
     print("All done :D")
 
