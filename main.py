@@ -61,8 +61,19 @@ def write_subreddits(csv_file, subreddits):
             row["members"] = int(row["members"])
             writer.writerow(row)
 
+def delete_posts_in_subreddit(reddit, selected_subreddit):
+    user = reddit.user.me()
+    for submission in user.submissions.new(limit=None):
+        if submission.subreddit.display_name.lower() == selected_subreddit["subreddit"].lower():
+            print(f"Deleting post: {submission.title} in r/{selected_subreddit['subreddit']}")
+            submission.delete()
+
 def create_post(selected_subreddit):
     reddit = praw.Reddit(client_id=client_id, client_secret=client_secret, user_agent=user_agent, username=username, password=password)
+
+    print(f"Deleting old posts in {selected_subreddit}...")
+    delete_posts_in_subreddit(reddit, selected_subreddit)
+    
     subreddit = reddit.subreddit(selected_subreddit["subreddit"])
     title = "Get $250 on FanDuel Sportsbook"
     body = (
