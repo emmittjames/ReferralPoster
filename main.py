@@ -43,7 +43,7 @@ def select_subreddit(subreddits, weights):
     try:
         selected_subreddit = random.choices(population=subreddits, weights=weights, k=1)[0]
     except ValueError:
-        print("All subreddits have been posted to recently. Exiting now.")
+        print("All subreddits have been posted to recently. Exiting now")
         sys.exit(1)
     return selected_subreddit
 
@@ -63,8 +63,14 @@ def write_subreddits(csv_file, subreddits):
 
 def create_post(selected_subreddit):
     reddit = praw.Reddit(client_id=client_id, client_secret=client_secret, user_agent=user_agent, username=username, password=password)
-    subreddit = reddit.subreddit(selected_subreddit)
-    subreddit.submit(title="Test title", selftext="Test body")
+    subreddit = reddit.subreddit(selected_subreddit["subreddit"])
+    title = "Get $250 on FanDuel Sportsbook"
+    body = (
+        "Referral link: https://refer.sportsbook.fanduel.com/#/land/4bcd834a-beeb-4b2c-98b0-2fac6a35527e\n\n"
+        "The only terms are that you must deposit $10 and make any bet with that $10 to qualify!\n\n"
+        "You will then receive $50 through my referral link and another $200 as a new customer bonus from FanDuel."
+    )
+    subreddit.submit(title=title, selftext=body)
     return subreddit.subscribers
 
 def main():
@@ -74,7 +80,7 @@ def main():
     weights = calculate_weights(subreddits)
 
     selected_subreddit = select_subreddit(subreddits, weights)
-    print(f"Selected subreddit: {selected_subreddit['subreddit']}")
+    print(f"Selected subreddit: {selected_subreddit["subreddit"]}")
 
     print("Creating post...")
     members = create_post(selected_subreddit)
@@ -86,5 +92,5 @@ def main():
     print("All done :D")
 
 if __name__ == "__main__":
-    if random.random() < 0.1:
+    if random.random() < 1:
         main()
