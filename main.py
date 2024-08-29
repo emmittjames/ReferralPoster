@@ -73,7 +73,7 @@ def create_post(selected_subreddit):
 
     print(f"Deleting old posts in {selected_subreddit}...")
     delete_posts_in_subreddit(reddit, selected_subreddit)
-    
+
     subreddit = reddit.subreddit(selected_subreddit["subreddit"])
     title = "Get $250 on FanDuel Sportsbook"
     body = (
@@ -103,5 +103,5 @@ def main():
     print("All done :D")
 
 if __name__ == "__main__":
-    if random.random() < 1:
+    if random.random() < 0.1:
         main()
