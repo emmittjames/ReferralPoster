@@ -1,5 +1,7 @@
 #!/bin/bash
 
+CURR_DIR="$(dirname "$(realpath "$0")")"
+
 cleanup() {
     echo "deactivating venv"
     deactivate
@@ -10,6 +12,9 @@ cleanup() {
 trap cleanup EXIT
 
 echo "main.sh called, current time is: $(date)"
+
+echo "navigating to directory $CURR_DIR"
+cd "$CURR_DIR" || exit
 
 echo "activating venv"
 source venv/bin/activate
