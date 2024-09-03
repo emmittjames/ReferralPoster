@@ -3,7 +3,7 @@ import sys
 import praw
 import configparser
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta
 
 config = configparser.ConfigParser()
 config.read("config.ini")
@@ -63,10 +63,13 @@ def write_subreddits(csv_file, subreddits):
 
 def delete_posts_in_subreddit(reddit, selected_subreddit):
     user = reddit.user.me()
+    one_month_ago = datetime.now() - timedelta(days=30)
     for submission in user.submissions.new(limit=None):
         if submission.subreddit.display_name.lower() == selected_subreddit["subreddit"].lower():
-            print(f"Deleting post: {submission.title} in r/{selected_subreddit['subreddit']}")
-            submission.delete()
+            submission_age = datetime.fromtimestamp(submission.created_utc)
+            if submission_age < one_month_ago:
+                print(f"Deleting post: {submission.title} in r/{selected_subreddit['subreddit']}")
+                submission.delete()
 
 def create_post(selected_subreddit):
     reddit = praw.Reddit(client_id=client_id, client_secret=client_secret, user_agent=user_agent, username=username, password=password)
