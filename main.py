@@ -97,7 +97,7 @@ def create_post(selected_subreddit, promo_subreddit):
     return subreddit.subscribers
 
 def main():
-    if random.random() < 0.99:
+    if random.random() < 0.3:
         promo_subreddit = False
         csv_file_path = "sportsbook_subreddits.csv"
     else:
