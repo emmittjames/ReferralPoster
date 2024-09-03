@@ -124,3 +124,5 @@ def main():
 if __name__ == "__main__":
     if random.random() < 0.1:
         main()
+    else:
+        print("Didn't make the cut :(")
