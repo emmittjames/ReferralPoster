@@ -110,7 +110,7 @@ def main():
     weights = calculate_weights(subreddits)
 
     selected_subreddit = select_subreddit(subreddits, weights)
-    print(f"Selected subreddit: {selected_subreddit["subreddit"]}")
+    print(f"Selected subreddit: {selected_subreddit['subreddit']}")
 
     print("Creating post...")
     members = create_post(selected_subreddit, promo_subreddit)
