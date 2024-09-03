@@ -63,11 +63,11 @@ def write_subreddits(csv_file, subreddits):
 
 def delete_posts_in_subreddit(reddit, selected_subreddit):
     user = reddit.user.me()
-    one_month_ago = datetime.now() - timedelta(days=30)
+    time_threshold = datetime.now() - timedelta(days=60)
     for submission in user.submissions.new(limit=None):
         if submission.subreddit.display_name.lower() == selected_subreddit["subreddit"].lower():
             submission_age = datetime.fromtimestamp(submission.created_utc)
-            if submission_age < one_month_ago:
+            if submission_age < time_threshold:
                 print(f"Deleting post: {submission.title} in r/{selected_subreddit['subreddit']}")
                 submission.delete()
 
