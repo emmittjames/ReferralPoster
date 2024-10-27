@@ -33,7 +33,7 @@ def calculate_weights(subreddits):
             weight = 0
         else:
             member_factor = subreddit['members'] / 100
-            weight = (1 * days_since_last_selected) * (1 + 0.3 * (member_factor / 1000))
+            weight = (1 * days_since_last_selected) * (1 + 0.1 * (member_factor / 1000))
         weights.append(weight)
     return weights
 
