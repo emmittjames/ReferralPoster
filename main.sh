@@ -17,7 +17,7 @@ echo "navigating to directory $CURR_DIR"
 cd "$CURR_DIR" || exit
 
 echo "activating venv"
-source venv/bin/activate
+source .venv/bin/activate
 
 echo "running main.py"
 python3 main.py
