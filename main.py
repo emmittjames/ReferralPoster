@@ -126,7 +126,7 @@ def main():
     print("All done :D")
 
 if __name__ == "__main__":
-    if random.random() < 0.18:
+    if random.random() < 0.27:
         main()
     else:
         print("Didn't make the cut :(")
