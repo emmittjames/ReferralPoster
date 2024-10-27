@@ -74,8 +74,7 @@ def get_title_and_body(promo_subreddit):
     if promo_subreddit:
         title = "Get $300 on FanDuel Sportsbook"
         body = (
-            "Referral link: https://refer.sportsbook.fanduel.com/#/land/e9a4f1cf-e1be-43b8-aeae-fc86dc0684f9\n\n"
-            "The only terms are you must deposit $10 and make any bet with that $10 to qualify!\n\n"
+            "Sign up using the [referral link](https://refer.sportsbook.fanduel.com/#/land/e9a4f1cf-e1be-43b8-aeae-fc86dc0684f9), deposit $10, and make any bet with that $10 to qualify!\n\n"
             "You will then receive $300 in bonus bets from FanDuel.\n\n"
             "My recommendation:\n"
             "1. Place the original $10 deposit on a high-odds bet to keep your own money safe.\n"
