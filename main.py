@@ -3,6 +3,7 @@ import sys
 import praw
 import configparser
 import csv
+import json
 from datetime import datetime, timedelta
 
 config = configparser.ConfigParser()
@@ -70,22 +71,38 @@ def delete_posts_in_subreddit(reddit, selected_subreddit):
                 submission.delete()
 
 def get_title_and_body(promo_subreddit):
-    referral_link = "https://refer.sportsbook.fanduel.com/#/land/e9a4f1cf-e1be-43b8-aeae-fc86dc0684f9"
+    # referral_link = "https://refer.sportsbook.fanduel.com/#/land/e9a4f1cf-e1be-43b8-aeae-fc86dc0684f9"
+    # if promo_subreddit:
+    #     title = "Get $300 on FanDuel Sportsbook"
+    #     body = (
+    #         "Sign up using this [referral link](https://refer.sportsbook.fanduel.com/#/land/e9a4f1cf-e1be-43b8-aeae-fc86dc0684f9), deposit $10, and place any winning bet with that $10 to qualify!\n\n"
+    #         "You will then receive $300 in bonus bets from FanDuel.\n\n"
+    #         "My recommendation:\n"
+    #         "1. Place the original $10 deposit on a high-odds bet to keep your money safe (look for bets that are -10000 and lower, these can easily be found in the “alternate total points” section of games).\n"
+    #         "2. With the $300 in bonus bets, split it between both teams in any matchup ($150 on each side). This way, no matter which team wins, you guarantee a profit."
+    #     )
+    # else:
+    #     title = "Referral code for $50 in bonus bets"
+    #     body = (
+    #         f"Referral link: {referral_link}\n\n"
+    #         "The only terms are that you must deposit $10 and make any bet. After that you will be awarded $50!"
+    #     )
+    with open("messages.json", "r") as file:
+        messages = json.load(file)
+    sportsbook = "fanduel"
+    sportsbook_messages = messages.get(sportsbook, {})
     if promo_subreddit:
-        title = "Get $300 on FanDuel Sportsbook"
-        body = (
-            "Sign up using this [referral link](https://refer.sportsbook.fanduel.com/#/land/e9a4f1cf-e1be-43b8-aeae-fc86dc0684f9), deposit $10, and place any winning bet with that $10 to qualify!\n\n"
-            "You will then receive $300 in bonus bets from FanDuel.\n\n"
-            "My recommendation:\n"
-            "1. Place the original $10 deposit on a high-odds bet to keep your money safe (look for bets that are -10000 and lower, these can easily be found in the “alternate total points” section of games).\n"
-            "2. With the $300 in bonus bets, split it between both teams in any matchup ($150 on each side). This way, no matter which team wins, you guarantee a profit."
-        )
+        message_type = "special"
     else:
-        title = "Referral code for $50 in bonus bets"
-        body = (
-            f"Referral link: {referral_link}\n\n"
-            "The only terms are that you must deposit $10 and make any bet. After that you will be awarded $50!"
-        )
+        message_type = "default"
+    referral_link = sportsbook_messages.get("referral_link", "")
+    deposit = default_earnings.get("deposit", 10)
+    earnings = sportsbook.get(message_type, {}).get("earnings", 10)
+
+    title = sportsbook.get(message_type, {}).get("title", "").format(referral_link=referral_link, earnings=earnings, deposit=deposit)
+    body = sportsbook.get(message_type, {}).get("body", "").format(referral_link=referral_link, earnings=earnings, deposit=deposit)
+    if sportsbook == "fanduel":
+
     return title, body
 
 def create_post(selected_subreddit, promo_subreddit):
