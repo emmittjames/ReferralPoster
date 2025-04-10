@@ -5,7 +5,7 @@
         "special": {
             "earnings": 250,
             "title": "Get $250 on FanDuel Sportsbook",
-             "body": "Sign up using this [referral link]({referral_link}), deposit ${deposit}, and place any winning bet with that ${deposit} to qualify!\n\nYou will then receive ${earnings} in bonus bets from FanDuel.\n\nMy recommendation:\n1. Place the original ${deposit} deposit on a high-odds bet to keep your money safe (look for bets that are -10000 and lower, these can easily be found in the “alternate total points” section of games).\n2. With the ${earnings} in bonus bets, split it evenly between 2 opposing in any matchup. This way, no matter what happens, you guarantee a profit.\n3. Once your bets settle, you can cash out and walk away with some free money :)"
+             "body": "Sign up using this [referral link]({referral_link}), deposit ${deposit}, and place any winning bet with that ${deposit} to qualify!\n\nYou will then receive ${earnings} in bonus bets from FanDuel.\n\nMy recommendation:\n1. Place the original ${deposit} deposit on a high-odds bet to keep your money safe (look for bets that are -10000 and lower, these can easily be found in the “alternate total points” section of games).\n2. With the ${earnings} in bonus bets, split it evenly between 2 opposing in any matchup. This way, no matter what happens, you guarantee a profit.\n3. Once your bets settle, you can cash out and walk away with your free money :)"
         },
         "default": {
             "earnings": 50,
