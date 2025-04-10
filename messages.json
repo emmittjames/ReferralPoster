@@ -10,7 +10,7 @@
         "default": {
             "earnings": 50,
             "title": "Referral code for ${earnings} in bonus bets",
-            "body": "Referral link: {referral_link}\n\nThe only terms are that you must deposit ${deposit} and make any bet. After that you will be awarded ${earnings}!"
+            "body": "Referral link: {referral_link}\n\nThe only terms are that you must deposit ${deposit} and make any bet. After that you will be awarded ${earnings} in bonus bets on top of the new customer offer!"
         }
     }
 }
