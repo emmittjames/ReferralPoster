@@ -70,9 +70,9 @@ def delete_posts_in_subreddit(reddit, selected_subreddit):
                 print(f"Deleting post: {submission.title} in r/{selected_subreddit['subreddit']}")
                 submission.delete()
 
-def get_title_and_body(selected_subreddit, promo_subreddit):
+def get_title_and_body(subreddit, is_promo_subreddit):
     # referral_link = "https://refer.sportsbook.fanduel.com/#/land/e9a4f1cf-e1be-43b8-aeae-fc86dc0684f9"
-    # if promo_subreddit:
+    # if is_promo_subreddit:
     #     title = "Get $300 on FanDuel Sportsbook"
     #     body = (
     #         "Sign up using this [referral link](https://refer.sportsbook.fanduel.com/#/land/e9a4f1cf-e1be-43b8-aeae-fc86dc0684f9), deposit $10, and place any winning bet with that $10 to qualify!\n\n"
@@ -90,11 +90,11 @@ def get_title_and_body(selected_subreddit, promo_subreddit):
     with open("messages.json", "r") as file:
         messages = json.load(file)
     sportsbook = "FanDuel"
-    if promo_subreddit:
+    if is_promo_subreddit:
         message_type = "special"
     else:
         message_type = "default"
-        sportsbook = selected_subreddit
+        sportsbook = str(subreddit)
     sportsbook_messages = messages.get(sportsbook, {})
     sportsbook_messages_specific = sportsbook_messages.get(message_type, {})
     referral_link = sportsbook_messages.get("referral_link", "")
@@ -104,26 +104,28 @@ def get_title_and_body(selected_subreddit, promo_subreddit):
     title = sportsbook_messages_specific.get("title", "").format(referral_link=referral_link, earnings=earnings, deposit=deposit)
     body = sportsbook_messages_specific.get("body", "").format(referral_link=referral_link, earnings=earnings, deposit=deposit)
 
+    print(f"Title: {title}")
+    print(f"Body: {body}")
     return title, body
 
-def create_post(selected_subreddit, promo_subreddit):
+def create_post(selected_subreddit, is_promo_subreddit):
     reddit = praw.Reddit(client_id=client_id, client_secret=client_secret, user_agent=user_agent, username=username, password=password)
 
     print(f"Deleting old posts in {selected_subreddit}...")
     delete_posts_in_subreddit(reddit, selected_subreddit)
 
     subreddit = reddit.subreddit(selected_subreddit["subreddit"])
-    title, body = get_title_and_body(selected_subreddit, promo_subreddit)
+    title, body = get_title_and_body(subreddit, is_promo_subreddit)
     subreddit.submit(title=title, selftext=body)
     return subreddit.subscribers
 
 def main():
-    if random.random() < 0.3:
-        promo_subreddit = False
+    if random.random() < 0.99:
+        is_promo_subreddit = False
         csv_file_path = "sportsbook_subreddits.csv"
     else:
-        promo_subreddit = True
-        csv_file_path = "promo_subreddits.csv"
+        is_promo_subreddit = True
+        csv_file_path = "is_promo_subreddits.csv"
 
     subreddits = read_subreddits(csv_file_path)
 
@@ -134,7 +136,7 @@ def main():
     print(f"Selected subreddit: {selected_subreddit['subreddit']}")
 
     print("Creating post...")
-    members = create_post(selected_subreddit, promo_subreddit)
+    members = create_post(selected_subreddit, is_promo_subreddit)
 
     print("Updating CSV file...")
     update_subreddit(selected_subreddit, members)
