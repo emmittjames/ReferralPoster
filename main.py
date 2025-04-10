@@ -71,22 +71,6 @@ def delete_posts_in_subreddit(reddit, selected_subreddit):
                 submission.delete()
 
 def get_title_and_body(subreddit, is_promo_subreddit):
-    # referral_link = "https://refer.sportsbook.fanduel.com/#/land/e9a4f1cf-e1be-43b8-aeae-fc86dc0684f9"
-    # if is_promo_subreddit:
-    #     title = "Get $300 on FanDuel Sportsbook"
-    #     body = (
-    #         "Sign up using this [referral link](https://refer.sportsbook.fanduel.com/#/land/e9a4f1cf-e1be-43b8-aeae-fc86dc0684f9), deposit $10, and place any winning bet with that $10 to qualify!\n\n"
-    #         "You will then receive $300 in bonus bets from FanDuel.\n\n"
-    #         "My recommendation:\n"
-    #         "1. Place the original $10 deposit on a high-odds bet to keep your money safe (look for bets that are -10000 and lower, these can easily be found in the “alternate total points” section of games).\n"
-    #         "2. With the $300 in bonus bets, split it between both teams in any matchup ($150 on each side). This way, no matter which team wins, you guarantee a profit."
-    #     )
-    # else:
-    #     title = "Referral code for $50 in bonus bets"
-    #     body = (
-    #         f"Referral link: {referral_link}\n\n"
-    #         "The only terms are that you must deposit $10 and make any bet. After that you will be awarded $50!"
-    #     )
     with open("messages.json", "r") as file:
         messages = json.load(file)
     sportsbook = "FanDuel"
@@ -116,16 +100,27 @@ def create_post(selected_subreddit, is_promo_subreddit):
 
     subreddit = reddit.subreddit(selected_subreddit["subreddit"])
     title, body = get_title_and_body(subreddit, is_promo_subreddit)
-    subreddit.submit(title=title, selftext=body)
+    try:
+        subreddit.submit(title=title, selftext=body)
+    except praw.exceptions.RedditAPIException as e:
+        flairs = list(subreddit.flair.link_templates)
+        flair_id = flairs[0]["id"]
+        desired_fairs = ["Referral Code"]
+        for flair in flairs:
+            if flair["text"] in desired_fairs:
+                flair_id = flair["id"]
+                break
+        subreddit.submit(title=title, selftext=body, flair_id=flair_id)
+
     return subreddit.subscribers
 
 def main():
-    if random.random() < 0.99:
+    if random.random() < 0.3:
         is_promo_subreddit = False
         csv_file_path = "sportsbook_subreddits.csv"
     else:
         is_promo_subreddit = True
-        csv_file_path = "is_promo_subreddits.csv"
+        csv_file_path = "promo_subreddits.csv"
 
     subreddits = read_subreddits(csv_file_path)
 
