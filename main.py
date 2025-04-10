@@ -70,7 +70,7 @@ def delete_posts_in_subreddit(reddit, selected_subreddit):
                 print(f"Deleting post: {submission.title} in r/{selected_subreddit['subreddit']}")
                 submission.delete()
 
-def get_title_and_body(promo_subreddit):
+def get_title_and_body(selected_subreddit, promo_subreddit):
     # referral_link = "https://refer.sportsbook.fanduel.com/#/land/e9a4f1cf-e1be-43b8-aeae-fc86dc0684f9"
     # if promo_subreddit:
     #     title = "Get $300 on FanDuel Sportsbook"
@@ -89,19 +89,20 @@ def get_title_and_body(promo_subreddit):
     #     )
     with open("messages.json", "r") as file:
         messages = json.load(file)
-    sportsbook = "fanduel"
-    sportsbook_messages = messages.get(sportsbook, {})
+    sportsbook = "FanDuel"
     if promo_subreddit:
         message_type = "special"
     else:
         message_type = "default"
+        sportsbook = selected_subreddit
+    sportsbook_messages = messages.get(sportsbook, {})
+    sportsbook_messages_specific = sportsbook_messages.get(message_type, {})
     referral_link = sportsbook_messages.get("referral_link", "")
-    deposit = default_earnings.get("deposit", 10)
-    earnings = sportsbook.get(message_type, {}).get("earnings", 10)
+    deposit = sportsbook_messages.get("deposit", 10)
+    earnings = sportsbook_messages_specific.get("earnings", 10)
 
-    title = sportsbook.get(message_type, {}).get("title", "").format(referral_link=referral_link, earnings=earnings, deposit=deposit)
-    body = sportsbook.get(message_type, {}).get("body", "").format(referral_link=referral_link, earnings=earnings, deposit=deposit)
-    if sportsbook == "fanduel":
+    title = sportsbook_messages_specific.get("title", "").format(referral_link=referral_link, earnings=earnings, deposit=deposit)
+    body = sportsbook_messages_specific.get("body", "").format(referral_link=referral_link, earnings=earnings, deposit=deposit)
 
     return title, body
 
@@ -112,7 +113,7 @@ def create_post(selected_subreddit, promo_subreddit):
     delete_posts_in_subreddit(reddit, selected_subreddit)
 
     subreddit = reddit.subreddit(selected_subreddit["subreddit"])
-    title, body = get_title_and_body(promo_subreddit)
+    title, body = get_title_and_body(selected_subreddit, promo_subreddit)
     subreddit.submit(title=title, selftext=body)
     return subreddit.subscribers
 
@@ -142,7 +143,8 @@ def main():
     print("All done :D")
 
 if __name__ == "__main__":
-    if random.random() < 0.27:
-        main()
-    else:
-        print("Didn't make the cut :(")
+    # if random.random() < 0.27:
+    #     main()
+    # else:
+    #     print("Didn't make the cut :(")
+    get_title_and_body("FanDuel", False)

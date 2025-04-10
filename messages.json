@@ -1,5 +1,5 @@
 {
-    "fanduel":{
+    "FanDuel":{
         "referral_link": "https://refer.sportsbook.fanduel.com/#/land/75c32cb4-7be9-48f2-8551-1b687cf9cf60",
         "deposit": 5,
         "special": {
@@ -9,8 +9,8 @@
         },
         "default": {
             "earnings": 50,
-            "title": "Referral code for ${default_earnings} in bonus bets",
-            "body": "Referral link: {referral_link}\n\nThe only terms are that you must deposit ${deposit} and make any bet. After that you will be awarded ${default_earnings}!"
+            "title": "Referral code for ${earnings} in bonus bets",
+            "body": "Referral link: {referral_link}\n\nThe only terms are that you must deposit ${deposit} and make any bet. After that you will be awarded ${earnings}!"
         }
     }
 }
